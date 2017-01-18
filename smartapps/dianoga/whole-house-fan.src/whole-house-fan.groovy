@@ -33,6 +33,7 @@ preferences {
     	input "inTemp", "capability.temperatureMeasurement", title: "Indoor Thermometer", required: true
         input "inHumidity", "capability.relativeHumidityMeasurement", title: "Indoor Humidity", required: true
         input "minTemp", "number", title: "Minimum Indoor Temperature"
+        input "tempThresh", "number", title: "Indoor temp at least N degrees warmer than outdoor temp"
         input "maxHumidity", "number", title: "Maximum Indoor Humidity"
         input "fans", "capability.switch", title: "Vent Fan", multiple: true, required: true
     }
@@ -81,8 +82,8 @@ def checkThings(evt) {
     
     def shouldRun = true;
     
-    if(insideTemp < outsideTemp) {
-    	log.debug "Not running due to insideTemp > outdoorTemp"
+    if(insideTemp < outsideTemp + settings.tempThresh) {
+    	log.debug "Not running due to insideTemp < outsideTemp + tempThresh"
     	shouldRun = false;
     }
     
